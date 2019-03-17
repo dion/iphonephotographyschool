@@ -1,5 +1,7 @@
 <?php
-
+/*****
+  Adds the correct “Start module reminder” tag to Infusionsoft contact based on order in which they bought courses and their progress in modules.
+******/
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\InfusionsoftHelper;
@@ -16,13 +18,16 @@ class Reminder extends Controller {
 
     if ($contactEmail) {
       $infusionsoft = new InfusionsoftHelper();
+      //print_r( $getUsers = $infusionsoft->getUsers() );
       $user = $infusionsoft->getContact($contactEmail);
 
       $resultMsg['data'] = $user ? $user : 'no user found';
       $resultMsg['success'] = $user ? true : false;
 
       // ipa,iaa
-      $products = $user['_Products'];
+      $userProducts = $user['_Products'];
+      $userId = $user['Id'];
+      $userEmail = $user['Email'];
 
       // use Tags Model to match/map out which reminder to send
     //print_r( $data = Tags::all() );
@@ -42,7 +47,7 @@ class Reminder extends Controller {
         if user has no products then default add tag to IPA [order is IPA, IEA, IAA]
         run addTag($contact_id, $tag_id)
     */   
-      
+
 
       return json_encode($resultMsg);
     } else {

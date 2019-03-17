@@ -13,5 +13,5 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get("/module_reminder_assigner", "Reminder@index");
+//Route::get("/module_reminder_assigner", "Reminder@index");
 Route::post("/module_reminder_assigner", "Reminder@index");
