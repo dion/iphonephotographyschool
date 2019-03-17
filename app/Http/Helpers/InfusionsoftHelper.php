@@ -38,9 +38,18 @@ class InfusionsoftHelper
         return '<a href="' . Infusionsoft::getAuthorizationUrl() . '">Authorize Infusionsoft</a>';
     }
 
+    public function getProducts() {
+        try {
+            return Infusionsoft::products()->all();
+
+        } catch (\Exception $e){
+            Log::error((string) $e);
+            return false;
+        }
+    }
+
     public function getAllTags(){
         try {
-
             return Infusionsoft::tags()->all();
 
         } catch (\Exception $e){
