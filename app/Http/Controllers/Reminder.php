@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\InfusionsoftHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Tags;
 
 class Reminder extends Controller {
@@ -16,21 +17,40 @@ class Reminder extends Controller {
       "data" => ''
     );
 
+    // $infusionsoft = new InfusionsoftHelper();
+    // print_r( $getUsers = $infusionsoft->getUsers() );
+    
     if ($contactEmail) {
       $infusionsoft = new InfusionsoftHelper();
-      //print_r( $getUsers = $infusionsoft->getUsers() );
+      
       $user = $infusionsoft->getContact($contactEmail);
 
       $resultMsg['data'] = $user ? $user : 'no user found';
       $resultMsg['success'] = $user ? true : false;
 
       // ipa,iaa
-      $userProducts = $user['_Products'];
+      //$userProducts = $user['_Products'];
       $userId = $user['Id'];
       $userEmail = $user['Email'];
 
+      $courses = DB::table('users')
+      ->join('user_completed_modules', 'user_completed_modules.user_id', 'users.id')
+      ->join('modules', 'modules.id', 'user_completed_modules.module_id')
+      ->select('modules.course_key', 'modules.name')
+      ->get();
+
+      //print_r($test);
+      foreach ($courses as $val) {
+        echo $val->course_key . "\n";
+        echo $val->name . "\n";
+      }
+
+      //I can build the array here
+      // ('ipa' => ['module 1', 'module 3', 'module 7'],
+      //  'iea' => ['module 1', 'module 7']);
+
       // use Tags Model to match/map out which reminder to send
-    //print_r( $data = Tags::all() );
+      //print_r( $data = Tags::all() );
 
     /*************
     ****
